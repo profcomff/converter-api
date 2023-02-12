@@ -1,4 +1,4 @@
-from pydantic import BaseSettings, PostgresDsn
+from pydantic import BaseSettings, PostgresDsn, DirectoryPath
 from functools import lru_cache
 from typing import List
 
@@ -18,8 +18,9 @@ class Settings(BaseSettings):
         case_sensitive = True
         env_file = ".env"
 
-    CONTENT_TYPES: List[str] = ['application/pdf']
+    CONTENT_TYPES: List[str] = ['application/pdf', "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]
     MAX_SIZE: int = 5000000  # Максимальный размер файла в байтах
+    STATIC_FOLDER :str =  DirectoryPath | None
 
 
 @lru_cache
