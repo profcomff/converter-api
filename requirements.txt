@@ -11,3 +11,4 @@ python-multipart
 Pillow
 fpdf2
 PyPDF3
+requests

@@ -41,7 +41,7 @@ async def convert(file, ext, settings):
     return [f"{name}", path]
 
 
-async def check_pdf_ok(fullfile:str):
+async def check_pdf_ok(fullfile: str):
     async with aiofiles.open(fullfile, 'rb') as f:
         try:
             f = await f.read()
@@ -50,6 +50,7 @@ async def check_pdf_ok(fullfile:str):
             return bool(info)
         except PyPdfError:
             return False
+
 
 '''
 #преобразует файл из картинки в pdf
