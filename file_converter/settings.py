@@ -5,6 +5,7 @@ from typing import List
 
 class Settings(BaseSettings):
     """Application settings"""
+
     DB_DSN: PostgresDsn
 
     CORS_ALLOW_ORIGINS: list[str] = ['*']
@@ -18,9 +19,13 @@ class Settings(BaseSettings):
         case_sensitive = True
         env_file = ".env"
 
-    CONTENT_TYPES: List[str] = ['application/pdf', "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]
+    CONTENT_TYPES: List[str] = [
+        'application/pdf',
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]
+    CONVERT_TYPES: List[str] = ['pdf']
     MAX_SIZE: int = 5000000  # Максимальный размер файла в байтах
-    STATIC_FOLDER :str =  DirectoryPath | None
+    STATIC_FOLDER: str = DirectoryPath | None
 
 
 @lru_cache

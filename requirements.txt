@@ -8,3 +8,6 @@ SQLAlchemy
 gunicorn
 aiofiles
 python-multipart
+Pillow
+fpdf2
+PyPDF3
