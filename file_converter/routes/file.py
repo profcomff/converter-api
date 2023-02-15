@@ -11,14 +11,6 @@ import requests
 
 router = APIRouter()
 
-'''
-class SendInput(BaseModel):
-    to_ext: str = Field(
-        description="extention to we are going to convert",
-        example='pdf',
-    )
-'''
-
 
 @router.post("/")
 async def upload_file(to_ext: str, file: UploadFile = File(...), settings: Settings = Depends(get_settings)):
