@@ -22,10 +22,8 @@ def randomStr(n):
 async def convert(file, ext, settings):
     memory_file = await file.read()
     name = str(datetime.datetime.now())+"#"+randomStr(10) + "." + ext
-    path = abspath(settings.STATIC_FOLDER) + '/' + name
+    path = settings.STATIC_FOLDER + '/' + name
     async with aiofiles.open(path, 'wb') as saved_file:
-        if len(memory_file) > settings.MAX_SIZE:
-            raise HTTPException(415, f'File too large, {settings.MAX_SIZE} bytes allowed')
         await saved_file.write(memory_file)
     await file.close()
     fileName, extension = splitext(path)  # [0] - путь + имя, [1] - расширение
