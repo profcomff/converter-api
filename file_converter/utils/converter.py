@@ -1,15 +1,12 @@
-from os.path import abspath
 import aiofiles
-from fastapi.exceptions import HTTPException
 from file_converter.utils.commands import run
-import hashlib
 import random
 from PyPDF3 import PdfFileReader
 from PyPDF3.utils import PyPdfError
 import io
 from os.path import splitext
 import string
-import datetime
+import time
 
 def randomStr(n):
     alph =  string.ascii_letters
@@ -21,7 +18,8 @@ def randomStr(n):
 
 async def convert(file, ext, settings):
     memory_file = await file.read()
-    name = str(datetime.datetime.now())+"#"+randomStr(10) + "." + ext
+    name = str(time.time())+"_"+randomStr(10) + "." + "doc" 
+    print(name)
     path = settings.STATIC_FOLDER + '/' + name
     async with aiofiles.open(path, 'wb') as saved_file:
         await saved_file.write(memory_file)
@@ -29,6 +27,7 @@ async def convert(file, ext, settings):
     fileName, extension = splitext(path)  # [0] - путь + имя, [1] - расширение
     extension = extension.lower()
     if not ext == extension:
+        pass
         await run(f"libreoffice --headless --convert-to {ext} {name}")
     # await run (f"rm static/{name} ")
     return [f"{name}", path]

@@ -6,8 +6,6 @@ from typing import List
 class Settings(BaseSettings):
     """Application settings"""
 
-    DB_DSN: PostgresDsn
-
     CORS_ALLOW_ORIGINS: list[str] = ['*']
     CORS_ALLOW_CREDENTIALS: bool = True
     CORS_ALLOW_METHODS: list[str] = ['*']
@@ -20,8 +18,9 @@ class Settings(BaseSettings):
         env_file = ".env"
 
     CONTENT_TYPES: List[str] = [
-        'application/pdf',
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        'pdf',
+        'docx',
+        'doc'
     ]
     CONVERT_TYPES: List[str] = ['pdf']
     MAX_SIZE: int = 5000000  # Максимальный размер файла в байтах
