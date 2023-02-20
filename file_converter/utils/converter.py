@@ -7,6 +7,17 @@ import io
 from os.path import splitext
 import string
 import time
+from fastapi import File
+from os.path import exists
+
+async def convert_doc_pdf(file_name: str):
+    await run(f"cd static; libreoffice --headless --convert-to pdf {file_name}")
+
+async def convert_docx_pdf(file_name: str):
+    await run(f"cd static; libreoffice --headless --convert-to pdf {file_name}")
+
+convert_runnables={"doc_pdf":convert_doc_pdf,"docx_pdf":convert_docx_pdf}
+
 
 def randomStr(n):
     alph =  string.ascii_letters
@@ -16,24 +27,24 @@ def randomStr(n):
     return s
 
 
-async def convert(file, ext, settings):
+async def convert(file: File, ext: str, static_folder:str):
     memory_file = await file.read()
-    name = str(time.time())+"_"+randomStr(10) + "." + "doc" 
-    print(name)
-    path = settings.STATIC_FOLDER + '/' + name
+    name = str(time.time())+"_"+randomStr(10) + "." + splitext(file.filename) [1].replace('.','')
+    path = static_folder + '/' + name
     async with aiofiles.open(path, 'wb') as saved_file:
         await saved_file.write(memory_file)
     await file.close()
     fileName, extension = splitext(path)  # [0] - путь + имя, [1] - расширение
     extension = extension.lower()
     if not ext == extension:
-        pass
-        await run(f"libreoffice --headless --convert-to {ext} {name}")
-    # await run (f"rm static/{name} ")
-    return [f"{name}", path]
+        await convert_runnables[extension[1:]+"_"+ext](name)
+        await run (f"rm static/{name} ")
+    return f"{fileName}.{ext}"
 
 
 async def check_pdf_ok(fullfile: str):
+    if not exists(fullfile):
+        return False
     async with aiofiles.open(fullfile, 'rb') as f:
         try:
             f = await f.read()

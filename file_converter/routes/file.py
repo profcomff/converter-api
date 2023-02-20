@@ -2,11 +2,9 @@ from fastapi import APIRouter, File, UploadFile, Request
 from file_converter.settings import Settings, get_settings
 from fastapi.params import Depends
 from fastapi.exceptions import HTTPException
-from file_converter.utils import converter
-from file_converter.utils.converter import check_pdf_ok
-from os.path import exists,splitext
-import aiofiles.os
+from file_converter.utils.converter import check_pdf_ok,convert
 import requests
+from file_converter.utils.commands import run
 
 router = APIRouter()
 
@@ -17,7 +15,6 @@ async def upload_file(to_ext: str, file: UploadFile = File(...), settings: Setti
     if not to_ext in settings.CONVERT_TYPES:
         raise HTTPException(415, 'unsupported to_ext')
     length = int(request.headers.get('Content-Length'))
-    print(length)
     if length > settings.MAX_SIZE:
             raise HTTPException(415, f'File too large, {settings.MAX_SIZE} bytes allowed')
 
@@ -27,12 +24,12 @@ async def upload_file(to_ext: str, file: UploadFile = File(...), settings: Setti
             f'Only {", ".join(settings.CONTENT_TYPES)} files allowed, but {file.content_type} recieved',
         )
 
-    result = await converter.convert(file, to_ext, settings)
-    if (not await check_pdf_ok(result[1])) or (not exists(result[1])):
-        await aiofiles.os.remove(result[1])
+    result = await convert(file, to_ext, settings.STATIC_FOLDER)
+    if (not await check_pdf_ok(result)):
+        await run(f"rm {result}")
         raise (HTTPException(415, "file corrupted"))
     try:
-        requests.post(settings.PRINTER_URL, data={"file_link": result[1]})
+        requests.post(settings.PRINTER_URL, data={"file_link": result})
     except requests.ConnectionError:
         pass
-    return {'status': "ok", 'link': f"static/{result[0]}"}
+    return {'status': "ok", 'link': result}
