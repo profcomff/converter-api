@@ -17,7 +17,7 @@ class Settings(BaseSettings):
         case_sensitive = True
         env_file = ".env"
 
-    CONTENT_TYPES: List[str] = [
+    EXTENTIONS: List[str] = [
         'pdf',
         'docx',
         'doc'

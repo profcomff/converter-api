@@ -18,10 +18,10 @@ async def upload_file(to_ext: str, file: UploadFile = File(...), settings: Setti
     if length > settings.MAX_SIZE:
             raise HTTPException(415, f'File too large, {settings.MAX_SIZE} bytes allowed')
 
-    if file.filename.split(".")[1] not in settings.CONTENT_TYPES:
+    if file.filename.split(".")[1] not in settings.EXTENTIONS:
         raise HTTPException(
             415,
-            f'Only {", ".join(settings.CONTENT_TYPES)} files allowed, but {file.content_type} recieved',
+            f'Only {", ".join(settings.EXTENTIONS)} files allowed, but {file.content_type} recieved',
         )
 
     result = await convert(file, to_ext, settings.STATIC_FOLDER)
