@@ -61,7 +61,8 @@ async def convert(file: File, ext: str, static_folder: str):
         await saved_file.write(memory_file)
     await file.close()
     file_name, extension = splitext(path)  # [0] - путь + имя, [1] - расширение
-    extension = extension.lower()[1:]  # убрать точку перед расширением
+    extension = extension.lower() # убрать точку перед расширением
+    print(extension)
     if not ext == extension:
         await TYPES[extension].convert(name)
         await run(f"rm static/{name} ")

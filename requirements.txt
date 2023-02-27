@@ -1,13 +1,10 @@
 fastapi
-psycopg2-binary
 pydantic[dotenv]
 uvicorn
 gunicorn
 aiofiles
 python-multipart
 PyPDF4
-requests
 pytest
 starlette
-httpx
 aiohttp
