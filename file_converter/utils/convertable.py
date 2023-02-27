@@ -55,7 +55,7 @@ def random_str(n):
 
 async def convert(file: File, ext: str, static_folder: str):
     memory_file = await file.read()
-    name = str(time.time()) + "_" + random_str(10) + "." + splitext(file.filename)[1].replace('.', '')
+    name = str(time.time()) + "_" + random_str(10) + "." + file.filename.split('.')[-1].replace('.', '')
     path = static_folder + '/' + name
     async with aiofiles.open(path, 'wb') as saved_file:
         await saved_file.write(memory_file)
