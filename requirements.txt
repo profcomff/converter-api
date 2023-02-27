@@ -10,3 +10,4 @@ requests~=2.28.2
 pytest~=7.2.1
 starlette~=0.25.0
 httpx~=0.23.3
+aiohttp

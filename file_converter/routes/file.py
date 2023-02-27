@@ -3,15 +3,25 @@ from file_converter.settings import Settings, get_settings
 from fastapi.params import Depends
 from fastapi.exceptions import HTTPException
 from file_converter.utils.convertable import check_pdf_ok, convert
-import requests
 from file_converter.utils.commands import run
+import aiohttp
+import asyncio
 
 router = APIRouter()
 
 
+async def main(url: str, data: dict):
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.get(url, data=data) as response:
+                pass
+        except aiohttp.client_exceptions.ClientConnectorError:
+            pass
+
+
 @router.post("/")
 async def upload_file(
-    to_ext: str, file: UploadFile = File(...), settings: Settings = Depends(get_settings), request: Request = None
+        to_ext: str, file: UploadFile = File(...), settings: Settings = Depends(get_settings), request: Request = None
 ):
     """Upload file to server. Takes extention to wich the file will be converted and the file"""
     if not to_ext in settings.CONVERT_TYPES:
@@ -26,8 +36,5 @@ async def upload_file(
     if not await check_pdf_ok(result):
         await run(f"rm {result}")
         raise (HTTPException(413, "file corrupted"))
-    try:
-        requests.post(settings.PRINTER_URL, data={"file_link": result})
-    except requests.ConnectionError:
-        pass
+    await (main(settings.PRINTER_URL, data={"file_link": result}))
     return {'status': "ok", 'link': result}
