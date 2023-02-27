@@ -25,7 +25,7 @@ async def upload_file(
     result = await convert(file, to_ext, settings.STATIC_FOLDER)
     if not await check_pdf_ok(result):
         await run(f"rm {result}")
-        raise (HTTPException(415, "file corrupted"))
+        raise (HTTPException(413, "file corrupted"))
     try:
         requests.post(settings.PRINTER_URL, data={"file_link": result})
     except requests.ConnectionError:

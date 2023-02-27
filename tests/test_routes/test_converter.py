@@ -51,7 +51,7 @@ def test_post_broken(client):
         )
     }
     res = client.post(url, params=body, files=files)
-    assert res.status_code == status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+    assert res.status_code == status.HTTP_413_REQUEST_ENTITY_TOO_LARGE
 
 
 def test_post_unsupported_convert_type(client):
