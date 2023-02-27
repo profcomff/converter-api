@@ -16,10 +16,6 @@ async def upload_file(
     """Upload file to server. Takes extention to wich the file will be converted and the file"""
     if not to_ext in settings.CONVERT_TYPES:
         raise HTTPException(415, 'unsupported to_ext')
-    length = int(request.headers.get('Content-Length'))
-    if length > settings.MAX_SIZE:
-        raise HTTPException(415, f'File too large, {settings.MAX_SIZE} bytes allowed')
-
     if file.filename.split(".")[1] not in settings.EXTENTIONS:
         raise HTTPException(
             415,

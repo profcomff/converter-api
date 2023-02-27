@@ -2,8 +2,8 @@ from __future__ import annotations
 import aiofiles
 from file_converter.utils.commands import run
 import random
-from PyPDF3 import PdfFileReader
-from PyPDF3.utils import PyPdfError
+from PyPDF4 import PdfFileReader
+from PyPDF4.utils import PyPdfError
 import io
 from os.path import splitext
 import string
@@ -68,10 +68,10 @@ async def convert(file: File, ext: str, static_folder: str):
     return f"{file_name}.{ext}"
 
 
-async def check_pdf_ok(fullfile: str):
-    if not exists(fullfile):
+async def check_pdf_ok(full_file: str):
+    if not exists(full_file):
         return False
-    async with aiofiles.open(fullfile, 'rb') as f:
+    async with aiofiles.open(full_file, 'rb') as f:
         try:
             f = await f.read()
             pdf = PdfFileReader(io.BytesIO(f))
