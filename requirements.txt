@@ -5,5 +5,5 @@ uvicorn
 gunicorn
 aiofiles
 python-multipart
-PyPDF3
+PyPDF4
 requests

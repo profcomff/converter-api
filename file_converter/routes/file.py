@@ -2,7 +2,7 @@ from fastapi import APIRouter, File, UploadFile, Request
 from file_converter.settings import Settings, get_settings
 from fastapi.params import Depends
 from fastapi.exceptions import HTTPException
-from file_converter.utils.converter import check_pdf_ok, convert
+from file_converter.utils.convertable import check_pdf_ok, convert
 import requests
 from file_converter.utils.commands import run
 
