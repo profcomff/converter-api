@@ -1,5 +1,6 @@
 from urllib.request import Request
 
+import aiohttp
 from fastapi import FastAPI
 from httpx import Response
 from starlette import status
@@ -33,3 +34,8 @@ class LimitUploadSize(BaseHTTPMiddleware):
 
 
 app.add_middleware(LimitUploadSize, max_upload_size=settings.MAX_SIZE)
+
+
+@app.exception_handler(aiohttp.client_exceptions.ClientConnectorError)
+async def not_found_error(request: Request, exc: aiohttp.client_exceptions.ClientConnectorError):
+    pass
