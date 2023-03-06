@@ -1,7 +1,7 @@
 from urllib.request import Request
 
 import aiohttp
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from httpx import Response
 from starlette import status
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
@@ -38,4 +38,7 @@ app.add_middleware(LimitUploadSize, max_upload_size=settings.MAX_SIZE)
 
 @app.exception_handler(aiohttp.client_exceptions.ClientConnectorError)
 async def not_found_error(request: Request, exc: aiohttp.client_exceptions.ClientConnectorError):
-    pass
+    raise HTTPException(
+            500,
+            f"request failed:  {exc} "
+        )

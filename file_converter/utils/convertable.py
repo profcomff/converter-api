@@ -72,6 +72,8 @@ async def convert(file: File, ext: str, static_folder: str):
 
 
 async def check_pdf_ok(full_file: str):
+    if not exists(full_file):
+        return False
     f=open(full_file, "rb").read()
     try:
         PdfFileReader(io.BytesIO(f))
