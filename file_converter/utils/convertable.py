@@ -3,7 +3,6 @@ import aiofiles
 from file_converter.utils.commands import run
 import random
 from PyPDF4 import PdfFileReader
-from PyPDF4.utils import PyPdfError
 import io
 import string
 import time
