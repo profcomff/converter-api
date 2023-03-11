@@ -8,3 +8,4 @@ PyPDF4
 pytest
 starlette
 aiohttp
+logging-profcomff

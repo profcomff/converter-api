@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile, Request
+from fastapi import APIRouter, File, UploadFile, Request, Body
 from pydantic import BaseModel
 
 from file_converter.settings import Settings, get_settings
@@ -8,7 +8,7 @@ from file_converter.utils.convertable import check_pdf_ok, convert
 from file_converter.utils.commands import run
 import aiohttp
 
-router = APIRouter()
+router = APIRouter(prefix="/file")
 
 
 async def main(url: str, data: dict):
@@ -18,11 +18,14 @@ async def main(url: str, data: dict):
 
 
 class Input(BaseModel):
-    to_ext: str
+    toext: str | None
+
+    class Config:
+        orm_mode = True
 
 
-@router.post("/")
-async def upload_file(file: UploadFile, inp: Input, settings: Settings = Depends(get_settings)):
+@router.post("", response_model=dict)
+async def upload_file(inp: Input = Depends(), file: UploadFile = File(...)):
     """Upload file to server. Takes extention to wich the file will be converted and the file"""
     if not inp.to_ext in settings.CONVERT_TYPES:
         raise HTTPException(415, 'unsupported to_ext')
