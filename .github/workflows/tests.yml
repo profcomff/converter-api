@@ -21,7 +21,7 @@ jobs:
           python -m pip install --upgrade --no-cache-dir -r requirements.txt -r requirements.dev.txt
       - name: Build coverage file
         run: |
-          DB_DSN=postgresql://postgres@localhost:5432/postgres STATIC_PATH=static pytest --cache-clear --showlocals --cov=calendar_backend tests > pytest-coverage.txt
+          DB_DSN=postgresql://postgres@localhost:5432/postgres STATIC_PATH=static pytest --cache-clear --showlocals --cov=file_converter tests > pytest-coverage.txt
       - name: Print report
         if: always()
         run: |
