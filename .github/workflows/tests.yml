@@ -11,17 +11,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Set up docker
+        uses: docker-practice/actions-setup-docker@master
+      - name: Run postgres
+        run: |
+          docker run -d -p 5432:5432 -e POSTGRES_HOST_AUTH_METHOD=trust --name db-test postgres:15-alpine
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
       - name: Install dependencies
         run: |
           python -m ensurepip
-          python -m pip install --upgrade --no-cache-dir pip
-          python -m pip install --upgrade --no-cache-dir -r requirements.txt -r requirements.dev.txt
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements.dev.txt
+      - name: Migrate DB
+        run: |
+          DB_DSN=postgresql://postgres@localhost:5432/postgres alembic upgrade head
       - name: Build coverage file
         run: |
-          STATIC_PATH=static pytest --cache-clear --showlocals --cov=converter-api tests > pytest-coverage.txt
+          STATIC_PATH=static pytest --cache-clear --cov=file_converter tests > pytest-coverage.txt
       - name: Print report
         if: always()
         run: |
