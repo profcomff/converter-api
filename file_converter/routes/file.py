@@ -9,7 +9,7 @@ from file_converter.utils.commands import run
 import aiohttp
 
 router = APIRouter(prefix="/file")
-
+settings = get_settings()
 
 async def main(url: str, data: dict):
     async with aiohttp.ClientSession() as session:
@@ -35,7 +35,7 @@ async def upload_file(inp: Input = Depends(), file: UploadFile = File(...)):
             f'Only {", ".join(settings.EXTENTIONS)} files allowed, but {file.content_type} recieved',
         )
 
-    result = await convert(file, inp.to_ext, settings.STATIC_FOLDER)
+    result = await convert(file, inp.to_ext, settings.STATIC_PATH)
     if not await check_pdf_ok(result):
         await run(f"rm {result}")
         raise (HTTPException(413, "file corrupted"))
