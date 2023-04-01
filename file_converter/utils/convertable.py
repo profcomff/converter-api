@@ -55,14 +55,12 @@ async def convert(file: File, ext: str, static_folder: str):
     memory_file = await file.read()
     name = str(time.time()) + "_" + random_str(10) + "." + file.filename.split('.')[-1].replace('.', '')
     path = static_folder + '/' + name
-
     async with aiofiles.open(path, 'wb') as saved_file:
         await saved_file.write(memory_file)
     await file.close()
-
     extension = path.split(".")[-1]
     file_name = path[0:-len(extension)-1]
-    extension = extension.lower()  # убрать точку перед расширением
+    extension = extension.lower() # убрать точку перед расширением
     if not ext == extension:
         try:
             await TYPES[extension].convert(name)
@@ -75,7 +73,7 @@ async def convert(file: File, ext: str, static_folder: str):
 async def check_pdf_ok(full_file: str):
     if not exists(full_file):
         return False
-    f =open(full_file, "rb").read()
+    f=open(full_file, "rb").read()
     try:
         PdfFileReader(io.BytesIO(f))
         return True

@@ -1,4 +1,4 @@
-from pydantic import BaseSettings, DirectoryPath
+from pydantic import BaseSettings, PostgresDsn, DirectoryPath
 from functools import lru_cache
 from typing import List
 

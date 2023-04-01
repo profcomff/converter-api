@@ -20,23 +20,6 @@ foo@bar:~$ pip install -r requirements.txt
 foo@bar:~$ python -m file_converter
 ```
 
-## Тестирование и LibreOffice
-
-1) Установка LibreOffice должна производиться в Docker'e, иначе при выполнении 
-строки через shell возникнут проблемы с доступом к диреткории /static
-
-2) При запуске автоматических тестирований на Windows необходимо в utils/convertable.py
-заменить во всех обращениях к shell через run команды 
-на соответсвующие ОС, указать полную директорию, 
-которую можно удобно узнать в пайчарме, а также полный путь на вашем компьютере до soffice.exe, который указывается в двойных кавычках 
-**(!!Но затем вернуть всё к исходному!!)** :
-```console
-run(f"del C:\Users\user\Documents\GitHub\converter-api\static\{name}")
-```
-```console
-run(f"cd *path*; "*path*\soffice.exe" --headless --convert-to pdf {file_name}")
-```
-
 ## ENV-file description
 
 DB_DSN=
