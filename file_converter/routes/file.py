@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile, Request
+from fastapi import APIRouter, File, UploadFile
 from pydantic import BaseModel
 
 from file_converter.settings import Settings, get_settings
@@ -22,14 +22,17 @@ class Input(BaseModel):
 
 
 @router.post("/")
-async def upload_file(file: UploadFile = File(), to_ext : str = Form(default=None), settings: Settings = Depends(get_settings)):
-    """Upload file to server. Takes extention to wich the file will be converted and the file"""
+async def upload_file(file: UploadFile = File(),
+                      to_ext : str = Form(default=None),
+                      settings: Settings = Depends(get_settings)):
+    """Upload file to server. Takes extension to which the file will be converted and the file"""
+
     if not to_ext in settings.CONVERT_TYPES:
         raise HTTPException(415, 'unsupported to_ext')
     if file.filename.split(".")[-1] not in settings.EXTENTIONS:
         raise HTTPException(
             415,
-            f'Only {", ".join(settings.EXTENTIONS)} files allowed, but {file.content_type} recieved',
+            f'Only {", ".join(settings.EXTENTIONS)} files allowed, but {file.content_type} received',
         )
 
     result = await convert(file, to_ext, settings.STATIC_FOLDER)

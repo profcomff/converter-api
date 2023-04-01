@@ -13,7 +13,7 @@ def test_dock_success(client):
             f"{fileName}",
             open(f"{fileName}", 'rb'),
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        ),
+        )
     }
     res = client.post(url, data=data, files=files)
     assert res.status_code == status.HTTP_200_OK
