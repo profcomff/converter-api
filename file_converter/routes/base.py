@@ -39,6 +39,6 @@ app.add_middleware(LimitUploadSize, max_upload_size=settings.MAX_SIZE)
 @app.exception_handler(aiohttp.client_exceptions.ClientConnectorError)
 async def not_found_error(request: Request, exc: aiohttp.client_exceptions.ClientConnectorError):
     raise HTTPException(
-            500,
+            404,
             f"request failed:  {exc} "
         )

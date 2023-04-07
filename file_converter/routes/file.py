@@ -1,30 +1,25 @@
 from fastapi import APIRouter, File, UploadFile
-from pydantic import BaseModel
-
 from file_converter.settings import Settings, get_settings
 from fastapi.params import Depends, Form
 from fastapi.exceptions import HTTPException
-from file_converter.utils.convertable import check_pdf_ok, convert
-from file_converter.utils.commands import run
-import aiohttp
+from file_converter.utils.convertable import convert
+from file_converter.utils.check_pdf import check_pdf_ok
+from get_dir import cd
+from pydantic import BaseModel
 
 router = APIRouter()
 
 
-async def main(url: str, data: dict):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, data=data) as response:
-            pass
-
-
-class Input(BaseModel):
-    to_ext: str
+class ConvertRespSchema(BaseModel):
+    status: str
+    file_dir: str
 
 
 @router.post("/")
 async def upload_file(file: UploadFile = File(),
-                      to_ext : str = Form(default=None),
-                      settings: Settings = Depends(get_settings)):
+                      to_ext: str = Form(default=None),
+                      settings: Settings = Depends(get_settings),
+                      response_model=ConvertRespSchema):
     """Upload file to server. Takes extension to which the file will be converted and the file"""
 
     if not to_ext in settings.CONVERT_TYPES:
@@ -32,12 +27,11 @@ async def upload_file(file: UploadFile = File(),
     if file.filename.split(".")[-1] not in settings.EXTENTIONS:
         raise HTTPException(
             415,
-            f'Only {", ".join(settings.EXTENTIONS)} files allowed, but {file.content_type} received',
+            f'Only {", ".join(settings.EXTENTIONS)} files are allowed.',
         )
 
     result = await convert(file, to_ext, settings.STATIC_FOLDER)
     if not await check_pdf_ok(result):
-        await run(f"rm {result}")
         raise (HTTPException(413, "file corrupted"))
-    await (main(settings.PRINTER_URL, data={"file_link": result}))
-    return {'status': "ok", 'link': result}
+
+    return {"status": "okay", "file_dir": f"{cd}{result}"}

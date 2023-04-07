@@ -21,7 +21,6 @@ class Settings(BaseSettings):
     CONVERT_TYPES: List[str] = ['pdf']
     MAX_SIZE: int = 5000000  # Максимальный размер файла в байтах
     STATIC_FOLDER: str = DirectoryPath | None
-    PRINTER_URL: str = "https://yandex.ru"
 
 
 @lru_cache
