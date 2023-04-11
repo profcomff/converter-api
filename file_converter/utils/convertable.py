@@ -1,8 +1,7 @@
 from __future__ import annotations
 import aiofiles
 from file_converter.utils.commands import run
-import random
-import string
+from file_converter.utils.random_str import random_str
 import time
 from fastapi import File, HTTPException
 from abc import ABCMeta, abstractmethod
@@ -40,11 +39,6 @@ class Docx(Convertable):
     @staticmethod
     async def convert(get: GetCommand):
         await run(get.command)
-
-
-def random_str(n):
-    alph = string.ascii_letters
-    return ''.join(random.choice(alph) for i in range(n))
 
 
 async def convert(file: File, ext: str):
