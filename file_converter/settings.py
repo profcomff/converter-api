@@ -1,6 +1,7 @@
 from pydantic import BaseSettings, DirectoryPath
 from functools import lru_cache
 from typing import List
+import os
 
 
 class Settings(BaseSettings):
@@ -17,6 +18,7 @@ class Settings(BaseSettings):
         case_sensitive = True
         env_file = ".env"
 
+    ROOT_PATH: str = '/' + os.getenv('APP_NAME', '')
     EXTENTIONS: List[str] = ['pdf', 'docx', 'doc']
     CONVERT_TYPES: List[str] = ['pdf']
     MAX_SIZE: int = 5000000  # Максимальный размер файла в байтах

@@ -25,13 +25,13 @@ foo@bar:~$ python -m file_converter
 1) Установка LibreOffice должна производиться в Docker, иначе при выполнении 
 строки через shell возникнут проблемы с доступом к диреткории /static
 
-2) При запуске автоматических тестирований на Windows необходимо в get_dir.py
-заменить полный путь на вашем компьютере до soffice.exe, если он был установлен нестандартно, который указывается в двойных кавычках 
-**(!!Но затем вернуть всё к исходному!!)** :
+2) При запуске автоматических тестирований на Windows в случае нестандартной установки 
+libreoffice - проверить директорию и добавить ее в список для поиска в get_dir:
 
 ```console
-' && "C:\Program Files\LibreOffice\program\soffice.exe" --headless --convert-to pdf '
+paths = ['\\Program Files', '\\Program Files (x86)', '\\ProgramData', '\\Users']
 ```
+
 
 ## ENV-file description
 
