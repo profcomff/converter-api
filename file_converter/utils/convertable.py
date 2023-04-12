@@ -7,10 +7,20 @@ from fastapi import File, HTTPException
 from abc import ABCMeta, abstractmethod
 import re
 import os
-from get_dir import GetCommand
+from get_dir import get_command
 
 SUPPORTED_TYPES: list[str] = []
 TYPES: dict[str, type[Convertable]] = dict()
+
+
+class GetCommand:
+
+    direct: str
+    command: str
+    def __init__(self, filename: str):
+        _com = get_command(filename)
+        self.command = _com.get('command')
+        self.direct = _com.get('direct')
 
 
 class Convertable(ABCMeta):
@@ -25,20 +35,20 @@ class Convertable(ABCMeta):
 
     @staticmethod
     @abstractmethod
-    def convert(get: GetCommand):
+    def convert(command: str):
         raise NotImplementedError()
 
 
 class Doc(Convertable):
     @staticmethod
-    async def convert(get: GetCommand):
-        await run(get.command)
+    async def convert(command: str):
+        await run(command)
 
 
 class Docx(Convertable):
     @staticmethod
-    async def convert(get: GetCommand):
-        await run(get.command)
+    async def convert(command: str):
+        await run(command)
 
 
 async def convert(file: File, ext: str):
@@ -56,7 +66,7 @@ async def convert(file: File, ext: str):
     extension = extension.lower()  # Убрать точку перед расширением
     if not ext == extension:
         try:
-            await TYPES[extension].convert(get)  # Ищем по расширению метод для конвертации
+            await TYPES[extension].convert(get.command)  # Ищем по расширению метод для конвертации
         except KeyError:
             raise HTTPException(415, 'unsupported to_ext')
         os.remove(get.direct)  # Удаляет старый файл, до конвертации

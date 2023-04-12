@@ -11,18 +11,17 @@ class Settings(BaseSettings):
     CORS_ALLOW_CREDENTIALS: bool = True
     CORS_ALLOW_METHODS: list[str] = ['*']
     CORS_ALLOW_HEADERS: list[str] = ['*']
+    ROOT_PATH: str = '/' + os.getenv('APP_NAME', '')
+    EXTENTIONS: List[str] = ['pdf', 'docx', 'doc']
+    CONVERT_TYPES: List[str] = ['pdf']
+    MAX_SIZE: int = 5000000  # Максимальный размер файла в байтах
+    STATIC_FOLDER: str = DirectoryPath | None
 
     class Config:
         """Pydantic BaseSettings config"""
 
         case_sensitive = True
         env_file = ".env"
-
-    ROOT_PATH: str = '/' + os.getenv('APP_NAME', '')
-    EXTENTIONS: List[str] = ['pdf', 'docx', 'doc']
-    CONVERT_TYPES: List[str] = ['pdf']
-    MAX_SIZE: int = 5000000  # Максимальный размер файла в байтах
-    STATIC_FOLDER: str = DirectoryPath | None
 
 
 @lru_cache
