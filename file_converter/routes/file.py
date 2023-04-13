@@ -3,7 +3,7 @@ from file_converter.settings import Settings, get_settings
 from fastapi.params import Depends, Form
 from fastapi.exceptions import HTTPException
 from file_converter.utils.convertable import convert
-from file_converter.utils.check_pdf import check_pdf_ok
+from os.path import exists
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -29,8 +29,8 @@ async def upload_file(file: UploadFile = File(),
             f'Only {", ".join(settings.EXTENTIONS)} files are allowed.',
         )
 
-    result = await convert(file, to_ext)
-    if not await check_pdf_ok(result):
+    result = await convert(file, to_ext, settings.STATIC_FOLDER)
+    if not exists(result):
         raise (HTTPException(413, "file corrupted"))
     root_path = settings.ROOT_PATH.removesuffix('/')
     return {"status": "okay", "file_url": f'{root_path}/{settings.STATIC_FOLDER}/{result}'}  #Отдает URL на файл

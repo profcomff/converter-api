@@ -13,16 +13,6 @@ SUPPORTED_TYPES: list[str] = []
 TYPES: dict[str, type[Convertable]] = dict()
 
 
-class GetCommand:
-
-    direct: str
-    command: str
-    def __init__(self, filename: str):
-        _com = get_command(filename)
-        self.command = _com.get('command')
-        self.direct = _com.get('direct')
-
-
 class Convertable(ABCMeta):
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
@@ -35,27 +25,32 @@ class Convertable(ABCMeta):
 
     @staticmethod
     @abstractmethod
-    def convert(command: str):
+    def convert(file_name: str):
         raise NotImplementedError()
 
 
 class Doc(Convertable):
+    _com: callable = get_command
+
     @staticmethod
-    async def convert(command: str):
-        await run(command)
+    async def convert(file_name: str):
+        await run(Doc._com()(file_name).get('command'))
+        os.remove(Doc._com()(file_name).get('direct'))  # Удаляет старый файл, до конвертации
 
 
 class Docx(Convertable):
+    _com: callable = get_command
+
     @staticmethod
-    async def convert(command: str):
-        await run(command)
+    async def convert(file_name: str):
+        await run(Docx._com()(file_name).get('command'))
+        os.remove(Docx._com()(file_name).get('direct'))  # Удаляет старый файл, до конвертации
 
 
-async def convert(file: File, ext: str):
+async def convert(file: File, ext: str, static_folder: str):
     memory_file = await file.read()
     name = str(time.time()) + "_" + random_str(10) + "." + file.filename.split('.')[-1].replace('.', '')
-    get = GetCommand(name)
-    path = get.direct
+    path = static_folder + '/' + name
 
     async with aiofiles.open(path, 'wb') as saved_file:
         await saved_file.write(memory_file)  # Сохраняем пришедший файл
@@ -66,8 +61,7 @@ async def convert(file: File, ext: str):
     extension = extension.lower()  # Убрать точку перед расширением
     if not ext == extension:
         try:
-            await TYPES[extension].convert(get.command)  # Ищем по расширению метод для конвертации
+            await TYPES[extension].convert(name)  # Ищем по расширению метод для конвертации
         except KeyError:
             raise HTTPException(415, 'unsupported to_ext')
-        os.remove(get.direct)  # Удаляет старый файл, до конвертации
     return f"{file_name}.{ext}"

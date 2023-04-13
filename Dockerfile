@@ -10,5 +10,6 @@ COPY ./migrations /migrations/
 
 COPY ./${APP_NAME} /app/${APP_NAME}
 
-
-
+RUN apt-get update && \
+	apt-get -y -q install \
+		libreoffice \
