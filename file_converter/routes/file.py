@@ -27,7 +27,7 @@ async def upload_file(file: UploadFile = File(),
     try:
         result = await convert(file, to_ext)
 
-    except ForbiddenExt:
+    except Unsupported_to_ext:
         raise HTTPException(status_code=415,
                             detail=f'Files are allowed to be converted only to {settings.CONVERT_TYPES[0]}'
                             )
@@ -35,7 +35,7 @@ async def upload_file(file: UploadFile = File(),
     except ConvertError:
         raise HTTPException(status_code=400, detail='Posted file is corrupted')
 
-    except Unsupported_to_ext:
+    except ForbiddenExt:
         raise HTTPException(status_code=415,
                             detail=f'Only {", ".join(settings.EXTENTIONS)} files are allowed.'
                             )
