@@ -4,6 +4,7 @@ from fastapi.params import Depends, Form
 from fastapi.exceptions import HTTPException
 from file_converter.converters.convert import convert
 from pydantic import BaseModel
+from file_converter.exceptions import ForbiddenExt
 
 router = APIRouter()
 
@@ -11,6 +12,10 @@ router = APIRouter()
 class ConvertRespSchema(BaseModel):
     status: str
     file_url: str
+
+
+def UnsupportedExt():
+    raise ForbiddenExt
 
 
 @router.post("/", response_model=ConvertRespSchema)
@@ -23,10 +28,12 @@ async def upload_file(file: UploadFile = File(),
     if to_ext not in settings.CONVERT_TYPES:
         raise HTTPException(415, 'unsupported to_ext')
     if file.filename.split(".")[-1] not in settings.EXTENTIONS:
-        raise HTTPException(
-            415,
-            f'Only {", ".join(settings.EXTENTIONS)} files are allowed.',
-        )
+        try:
+            UnsupportedExt()
+        except ForbiddenExt:
+            raise HTTPException(status_code=415,
+                                detail=f'Only {", ".join(settings.EXTENTIONS)} files are allowed.'
+                                )
 
     result = await convert(file, to_ext)
     root_path = settings.ROOT_PATH.removesuffix('/')

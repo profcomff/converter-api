@@ -1,7 +1,12 @@
 import os
 import platform
 from file_converter.utils.commands import run
-from file_converter.exceptions import HTTP_400_BAD_REQUEST
+from file_converter.exceptions import ConvertError
+from fastapi import HTTPException
+
+
+def ConverterException():
+    raise ConvertError
 
 
 def find(name: str, paths: list):
@@ -22,18 +27,21 @@ def get_command():
         slash = '\\'
         cd = f'{ext_d[:-2]}{slash}static{slash}'
         libre_path = find('soffice.exe', paths)
-        comm = f'cd {cd} && "{libre_path}" --headless --convert-to pdf'
+        command = f'cd {cd} && "{libre_path}" --headless --convert-to pdf'
 
     else:
         slash = '/'
         cd = f'{ext_d[:-2]}{slash}static{slash}'
-        comm = f'cd {cd}; libreoffice --headless --convert-to pdf'
+        command = f'cd {cd}; libreoffice --headless --convert-to pdf'
 
     async def command_exec(filename: str, _new_filename: str):
-        await run(f'{comm} {filename}')
+        await run(f'{command} {filename}')
         os.remove(f'{cd}{filename}')  # Удаляет старый файл после конвертации
         if not os.path.exists(f'{cd}{_new_filename}'):  # Проверка на успешность конвертации
-            raise HTTP_400_BAD_REQUEST
+            try:
+                ConverterException()
+            except ConvertError:
+                raise HTTPException(status_code=400, detail='Posted file is corrupted')
 
     return command_exec
 

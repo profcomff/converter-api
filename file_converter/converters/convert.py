@@ -18,14 +18,14 @@ async def convert(file: UploadFile, to_ext: str):
 
     timestamp = str(time.time())
     _random_str = random_str(10)
-    old_name = f'{timestamp}_{_random_str}.{extension}'
-    path = f'{settings.STATIC_FOLDER}/{old_name}'
+    _old_name = f'{timestamp}_{_random_str}.{extension}'
+    _old_path = f'{settings.STATIC_FOLDER}/{_old_name}'
     _new_name = f'{timestamp}_{_random_str}.{to_ext}'
 
-    async with aiofiles.open(path, 'wb') as saved_file:
+    async with aiofiles.open(_old_path, 'wb') as saved_file:
         await saved_file.write(memory_file)  # Сохраняем пришедший файл
 
     extension = extension.lower()  # Убрать точку перед расширением
-    await TYPES[extension].convert(old_name, _new_name)
+    await TYPES[extension].convert(_old_name, _new_name)
 
     return _new_name

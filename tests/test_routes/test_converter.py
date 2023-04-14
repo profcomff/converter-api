@@ -1,7 +1,5 @@
 from starlette import status
 from file_converter.settings import get_settings
-from file_converter.exceptions import HTTP_400_BAD_REQUEST
-import pytest
 
 url = '/'
 settings = get_settings()
@@ -36,23 +34,37 @@ def test_doc_success(client):
 
 
 def test_post_broken(client):
-    with pytest.raises(HTTP_400_BAD_REQUEST):
-        data = {'to_ext': 'pdf'}
-        fileName = 'tests/files/test_broken.docx'
-        files = {
-            'file': (
-                f"{fileName}",
-                open(f"{fileName}", 'rb'),
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            )
-        }
+    data = {'to_ext': 'pdf'}
+    fileName = 'tests/files/test_broken.docx'
+    files = {
+        'file': (
+            f"{fileName}",
+            open(f"{fileName}", 'rb'),
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        )
+    }
 
-        client.post(url, data=data, files=files)
+    res = client.post(url, data=data, files=files)
+    assert res.status_code == status.HTTP_400_BAD_REQUEST
 
 
 def test_post_unsupported_convert_type(client):
     data = {'to_ext': 'xls'}
     fileName = 'tests/files/test.docx'
+    files = {
+        'file': (
+            f"{fileName}",
+            open(f"{fileName}", 'rb'),
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        )
+    }
+    res = client.post(url, data=data, files=files)
+    assert res.status_code == status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+
+
+def test_post_broken_ext(client):
+    data = {'to_ext': 'pdf'}
+    fileName = 'tests/files/test'
     files = {
         'file': (
             f"{fileName}",
