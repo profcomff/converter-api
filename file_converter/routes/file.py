@@ -4,7 +4,7 @@ from fastapi.params import Depends, Form
 from fastapi.exceptions import HTTPException
 from file_converter.converters.convert import convert
 from pydantic import BaseModel
-from file_converter.exceptions import ForbiddenExt, ConvertError, Unsupported_to_ext
+from file_converter.exceptions import ForbiddenExt, ConvertError, UnsupportedtoExt
 
 router = APIRouter()
 
@@ -21,15 +21,12 @@ async def upload_file(file: UploadFile = File(),
                       ):
     """Upload file to server. Takes extension to which the file will be converted and the file"""
 
-    if to_ext not in settings.CONVERT_TYPES:
-        raise HTTPException(415, 'unsupported to_ext')
-
     try:
         result = await convert(file, to_ext)
 
-    except Unsupported_to_ext:
+    except UnsupportedtoExt:
         raise HTTPException(status_code=415,
-                            detail=f'Files are allowed to be converted only to {settings.CONVERT_TYPES[0]}'
+                            detail=f'Files are allowed to be converted only to {", ".join(settings.CONVERT_TYPES)}'
                             )
 
     except ConvertError:

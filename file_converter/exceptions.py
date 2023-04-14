@@ -3,7 +3,7 @@ class ConvertError(Exception):
         super().__init__('Posted file is corrupted')
 
 
-class Unsupported_to_ext(Exception):
+class UnsupportedtoExt(Exception):
     def __init__(self):
         super().__init__('Unsupported to_ext')
 

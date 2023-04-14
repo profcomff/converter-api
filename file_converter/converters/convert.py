@@ -5,7 +5,7 @@ import aiofiles
 from fastapi import UploadFile
 from file_converter.converters.convertable import settings, TYPES
 from file_converter.utils.random_str import random_str
-from file_converter.exceptions import ForbiddenExt, Unsupported_to_ext
+from file_converter.exceptions import ForbiddenExt, UnsupportedtoExt
 
 
 async def convert(file: UploadFile, to_ext: str):
@@ -13,7 +13,7 @@ async def convert(file: UploadFile, to_ext: str):
     if file.filename.split(".")[-1] not in settings.EXTENTIONS:
         raise ForbiddenExt()
     if to_ext not in settings.CONVERT_TYPES:
-        raise Unsupported_to_ext()
+        raise UnsupportedtoExt()
 
     try:
         memory_file = await file.read()
