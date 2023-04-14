@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import time
+
 import aiofiles
 from fastapi import UploadFile
-from file_converter.converters.convertable import settings, TYPES
-from file_converter.utils.random_str import random_str
+
+from file_converter.converters.convertable import TYPES, settings
 from file_converter.exceptions import ForbiddenExt, UnsupportedtoExt
+from file_converter.utils.random_str import random_str
 
 
 async def convert(file: UploadFile, to_ext: str):

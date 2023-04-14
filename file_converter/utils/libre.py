@@ -1,7 +1,8 @@
 import os
 import platform
-from file_converter.utils.commands import run
+
 from file_converter.exceptions import ConvertError
+from file_converter.utils.commands import run
 
 
 def find(name: str, paths: list):
@@ -9,6 +10,7 @@ def find(name: str, paths: list):
         for root, dirs, files in os.walk(path):
             if name in files:
                 return os.path.join(root, name)
+
 
 # Поиск по базовым катологам, куда мог быть установлен soffice
 
@@ -33,8 +35,9 @@ def get_command():
         await run(f'{command} {filename}')
         os.remove(f'{cd}{filename}')  # Удаляет старый файл после конвертации
         if not os.path.exists(f'{cd}{_new_filename}'):  # Проверка на успешность конвертации
-                raise ConvertError()
+            raise ConvertError()
 
     return command_exec
+
 
 # Функция выполняет команду и получает директорию для файла, независимо от ОС

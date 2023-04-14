@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable, Awaitable
+from typing import Awaitable, Callable
 
 from file_converter.converters.convertable import Convertable
 from file_converter.utils.libre import get_command

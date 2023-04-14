@@ -1,7 +1,8 @@
-from pydantic import BaseSettings, DirectoryPath
+import os
 from functools import lru_cache
 from typing import List
-import os
+
+from pydantic import BaseSettings, DirectoryPath
 
 
 class Settings(BaseSettings):

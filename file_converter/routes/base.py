@@ -2,14 +2,16 @@ from urllib.request import Request
 
 import aiohttp
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 from httpx import Response
 from starlette import status
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.types import ASGIApp
 
 from file_converter.routes.file import router as converter_router
+
 from ..settings import Settings
-from fastapi.staticfiles import StaticFiles
+
 
 settings = Settings()
 app = FastAPI()
@@ -38,7 +40,4 @@ app.add_middleware(LimitUploadSize, max_upload_size=settings.MAX_SIZE)
 
 @app.exception_handler(aiohttp.client_exceptions.ClientConnectorError)
 async def not_found_error(request: Request, exc: aiohttp.client_exceptions.ClientConnectorError):
-    raise HTTPException(
-            404,
-            f"request failed:  {exc} "
-        )
+    raise HTTPException(404, f"request failed:  {exc} ")

@@ -1,6 +1,8 @@
 from __future__ import annotations
-from abc import ABCMeta, abstractmethod
+
 import re
+from abc import ABCMeta, abstractmethod
+
 from file_converter.settings import get_settings
 
 

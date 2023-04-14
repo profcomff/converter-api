@@ -1,5 +1,7 @@
 from starlette import status
+
 from file_converter.settings import get_settings
+
 
 url = '/'
 settings = get_settings()
