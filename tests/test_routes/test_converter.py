@@ -1,9 +1,11 @@
 from starlette import status
 from file_converter.settings import get_settings
-
+from file_converter.exceptions import HTTP_400_BAD_REQUEST
+import pytest
 
 url = '/'
 settings = get_settings()
+
 
 def test_dock_success(client):
     data = {'to_ext': 'pdf'}
@@ -34,18 +36,18 @@ def test_doc_success(client):
 
 
 def test_post_broken(client):
-    data = {'to_ext': 'pdf'}
-    fileName = 'tests/files/test_broken.docx'
-    files = {
-        'file': (
-            f"{fileName}",
-            open(f"{fileName}", 'rb'),
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        )
-    }
+    with pytest.raises(HTTP_400_BAD_REQUEST):
+        data = {'to_ext': 'pdf'}
+        fileName = 'tests/files/test_broken.docx'
+        files = {
+            'file': (
+                f"{fileName}",
+                open(f"{fileName}", 'rb'),
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            )
+        }
 
-    res = client.post(url, data=data, files=files)
-    assert res.status_code == status.HTTP_413_REQUEST_ENTITY_TOO_LARGE
+        client.post(url, data=data, files=files)
 
 
 def test_post_unsupported_convert_type(client):

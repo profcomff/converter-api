@@ -1,5 +1,7 @@
 import os
 import platform
+from file_converter.utils.commands import run
+from file_converter.exceptions import HTTP_400_BAD_REQUEST
 
 
 def find(name: str, paths: list):
@@ -27,9 +29,12 @@ def get_command():
         cd = f'{ext_d[:-2]}{slash}static{slash}'
         comm = f'cd {cd}; libreoffice --headless --convert-to pdf'
 
-    def command(filename: str):
-        return {'command': f'{comm} {filename}', 'direct': f'{cd}{filename}'}
+    async def command_exec(filename: str, _new_filename: str):
+        await run(f'{comm} {filename}')
+        os.remove(f'{cd}{filename}')  # Удаляет старый файл после конвертации
+        if not os.path.exists(f'{cd}{_new_filename}'):  # Проверка на успешность конвертации
+            raise HTTP_400_BAD_REQUEST
 
-    return command
+    return command_exec
 
-# Функция выдает команду и директорию для файла, независимо от ОС
+# Функция выполняет команду и получает директорию для файла, независимо от ОС

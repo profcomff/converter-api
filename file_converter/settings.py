@@ -1,4 +1,4 @@
-from pydantic import BaseSettings
+from pydantic import BaseSettings, DirectoryPath
 from functools import lru_cache
 from typing import List
 import os
@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     EXTENTIONS: List[str] = ['pdf', 'docx', 'doc']
     CONVERT_TYPES: List[str] = ['pdf']
     MAX_SIZE: int = 5000000  # Максимальный размер файла в байтах
-    STATIC_FOLDER: str | None
+    STATIC_FOLDER: DirectoryPath | None
 
     class Config:
         """Pydantic BaseSettings config"""
