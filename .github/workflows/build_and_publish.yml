@@ -75,6 +75,7 @@ jobs:
             --restart always \
             --network=web \
             --env ROOT_PATH='/converter' \
+            --env STATIC_FOLDER='static' \
             --env GUNICORN_CMD_ARGS='--log-config  logging_test.conf' \
             --name ${{ env.CONTAINER_NAME }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test
@@ -105,6 +106,7 @@ jobs:
             --restart always \
             --network=web \
             --env ROOT_PATH='/converter' \
+            --env STATIC_FOLDER='static' \
             --env GUNICORN_CMD_ARGS='--log-config  logging_prod.conf' \
             --name ${{ env.CONTAINER_NAME }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest

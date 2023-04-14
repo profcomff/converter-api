@@ -22,7 +22,7 @@ jobs:
           pip install -r requirements.txt -r requirements.dev.txt
       - name: Build coverage file
         run: |
-          DB_DSN=postgresql://postgres@localhost:5432/postgres pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=file_converter tests/ | tee pytest-coverage.txt
+          STATIC_FOLDER=static \ pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=file_converter tests/ | tee pytest-coverage.txt
       - name: Print report
         if: always()
         run: |
