@@ -11,7 +11,6 @@ from file_converter.utils.random_str import random_str
 
 
 async def convert(file: UploadFile, to_ext: str):
-
     if file.filename.split(".")[-1] not in settings.EXTENTIONS:
         raise ForbiddenExt()
     if to_ext not in settings.CONVERT_TYPES:
