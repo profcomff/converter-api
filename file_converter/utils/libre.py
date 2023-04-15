@@ -19,7 +19,6 @@ def get_command():
     _os = platform.system()
     ext_d = os.path.abspath(" ")
 
-
     match _os:
         case "Windows":
             paths = ['\\Program Files', '\\Program Files (x86)', '\\ProgramData', '\\Users']
@@ -35,7 +34,6 @@ def get_command():
             slash = '/'
             cd = f'{ext_d[:-2]}{slash}static{slash}'
             command = f'cd {cd}; soffice --headless --convert-to pdf'
-
 
     async def command_exec(filename: str, _new_filename: str):
         await run(f'{command} {filename}')
