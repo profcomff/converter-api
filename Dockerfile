@@ -6,7 +6,6 @@ COPY ./requirements.txt /app/
 RUN pip install -U -r /app/requirements.txt
 
 COPY ./static /app/static/
-COPY ./migrations /migrations/
 
 COPY ./${APP_NAME} /app/${APP_NAME}
 
