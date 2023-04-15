@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     EXTENTIONS: List[str] = ['pdf', 'docx', 'doc']
     CONVERT_TYPES: List[str] = ['pdf']
     MAX_SIZE: int = 5000000  # Максимальный размер файла в байтах
-    STATIC_FOLDER: DirectoryPath | None
+    STATIC_FOLDER: DirectoryPath | None = "static"
 
     class Config:
         """Pydantic BaseSettings config"""

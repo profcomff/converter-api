@@ -29,7 +29,7 @@ def get_command():
     else:
         slash = '/'
         cd = f'{ext_d[:-2]}{slash}static{slash}'
-        command = f'cd {cd}; soffice --headless --convert-to pdf'
+        command = f'cd {cd}; libreoffice --headless --convert-to pdf'
 
     async def command_exec(filename: str, _new_filename: str):
         await run(f'{command} {filename}')
