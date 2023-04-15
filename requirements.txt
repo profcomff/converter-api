@@ -1,0 +1,10 @@
+fastapi
+pydantic[dotenv]
+uvicorn
+gunicorn
+aiofiles
+python-multipart
+pytest
+starlette
+logging-profcomff
+aiohttp
