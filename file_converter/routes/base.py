@@ -5,6 +5,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from httpx import Response
 from starlette import status
+from file_converter import __version__
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.types import ASGIApp
 
@@ -14,7 +15,15 @@ from ..settings import Settings
 
 
 settings = Settings()
-app = FastAPI()
+app = FastAPI(
+    title='Сервис конвертации документов',
+    description='Серверная часть сервиса конвертации и хранения пользовательских документов',
+    version=__version__,
+    # Отключаем нелокальную документацию
+    root_path=settings.ROOT_PATH if __version__ != 'dev' else '/',
+    docs_url=None if __version__ != 'dev' else '/docs',
+    redoc_url=None,
+)
 
 app.include_router(converter_router, prefix='', tags=['Converter'])
 app.mount('/static', StaticFiles(directory='static'), 'static')
