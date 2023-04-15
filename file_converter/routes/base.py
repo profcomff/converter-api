@@ -5,10 +5,10 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from httpx import Response
 from starlette import status
-from file_converter import __version__
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.types import ASGIApp
 
+from file_converter import __version__
 from file_converter.routes.file import router as converter_router
 
 from ..settings import Settings
