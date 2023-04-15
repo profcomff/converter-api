@@ -16,20 +16,26 @@ def find(name: str, paths: list):
 
 
 def get_command():
-    OS = platform.system()
+    _os = platform.system()
     ext_d = os.path.abspath(" ")
 
-    if OS == "Windows":
-        paths = ['\\Program Files', '\\Program Files (x86)', '\\ProgramData', '\\Users']
-        slash = '\\'
-        cd = f'{ext_d[:-2]}{slash}static{slash}'
-        libre_path = find('soffice.exe', paths)
-        command = f'cd {cd} && "{libre_path}" --headless --convert-to pdf'
 
-    else:
-        slash = '/'
-        cd = f'{ext_d[:-2]}{slash}static{slash}'
-        command = f'cd {cd}; libreoffice --headless --convert-to pdf'
+    match _os:
+        case "Windows":
+            paths = ['\\Program Files', '\\Program Files (x86)', '\\ProgramData', '\\Users']
+            slash = '\\'
+            cd = f'{ext_d[:-2]}{slash}static{slash}'
+            libre_path = find('soffice.exe', paths)
+            command = f'cd {cd} && "{libre_path}" --headless --convert-to pdf'
+        case "Linux":
+            slash = '/'
+            cd = f'{ext_d[:-2]}{slash}static{slash}'
+            command = f'cd {cd}; libreoffice --headless --convert-to pdf'
+        case "Darwin":
+            slash = '/'
+            cd = f'{ext_d[:-2]}{slash}static{slash}'
+            command = f'cd {cd}; soffice --headless --convert-to pdf'
+
 
     async def command_exec(filename: str, _new_filename: str):
         await run(f'{command} {filename}')
