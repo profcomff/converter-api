@@ -4,6 +4,7 @@ import aiohttp
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from httpx import Response
+from pydantic import BaseModel, Field
 from starlette import status
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.types import ASGIApp
@@ -50,3 +51,13 @@ app.add_middleware(LimitUploadSize, max_upload_size=settings.MAX_SIZE)
 @app.exception_handler(aiohttp.client_exceptions.ClientConnectorError)
 async def not_found_error(request: Request, exc: aiohttp.client_exceptions.ClientConnectorError):
     raise HTTPException(404, f"request failed:  {exc} ")
+
+
+class Extensions(BaseModel):
+    in_: list[str] = Field(alias="in")
+    out: list[str]
+
+
+@app.get('/extensions')
+async def extensions() -> Extensions:
+    return Extensions(**{"in": settings.CONVERT_TYPES, "out": settings.EXTENTIONS})
