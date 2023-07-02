@@ -5,6 +5,7 @@ gunicorn
 aiofiles
 python-multipart
 pytest
+auth-lib-profcomff[fastapi]
 starlette
 logging-profcomff
 aiohttp
