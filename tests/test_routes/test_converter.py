@@ -4,7 +4,7 @@ from starlette import status
 from file_converter.settings import get_settings
 
 
-url = '/'
+url = '/convert'
 settings = get_settings()
 
 
