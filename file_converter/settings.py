@@ -2,7 +2,7 @@ import os
 from functools import lru_cache
 from typing import List
 
-from pydantic import DirectoryPath, ConfigDict
+from pydantic import ConfigDict, DirectoryPath
 from pydantic_settings import BaseSettings
 
 
