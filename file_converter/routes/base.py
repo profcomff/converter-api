@@ -48,8 +48,8 @@ class LimitUploadSize(BaseHTTPMiddleware):
 app.add_middleware(LimitUploadSize, max_upload_size=settings.MAX_SIZE)
 
 
-@app.exception_handler(aiohttp.client_exceptions.ClientConnectorError)
-async def not_found_error(request: Request, exc: aiohttp.client_exceptions.ClientConnectorError):
+@app.exception_handler(aiohttp.ClientConnectorError)
+async def not_found_error(request: Request, exc: aiohttp.ClientConnectorError):
     raise HTTPException(404, f"request failed:  {exc} ")
 
 
