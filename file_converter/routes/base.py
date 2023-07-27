@@ -21,7 +21,7 @@ app = FastAPI(
     description='Серверная часть сервиса конвертации и хранения пользовательских документов',
     version=__version__,
     # Отключаем нелокальную документацию
-    root_path=settings.ROOT_PATH if __version__ != 'dev' else '/',
+    root_path=str(settings.ROOT_PATH) if __version__ != 'dev' else '/',
     docs_url=None if __version__ != 'dev' else '/docs',
     redoc_url=None,
 )
@@ -40,12 +40,12 @@ class LimitUploadSize(BaseHTTPMiddleware):
             if 'content-length' not in request.headers:
                 return Response(status_code=status.HTTP_411_LENGTH_REQUIRED)
             content_length = int(request.headers['content-length'])
-            if content_length > self.max_upload_size:
+            if content_length > int(self.max_upload_size):
                 return Response(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE)
         return await call_next(request)
 
 
-app.add_middleware(LimitUploadSize, max_upload_size=settings.MAX_SIZE)
+app.add_middleware(LimitUploadSize, max_upload_size=str(settings.MAX_SIZE))
 
 
 @app.exception_handler(aiohttp.ClientConnectorError)

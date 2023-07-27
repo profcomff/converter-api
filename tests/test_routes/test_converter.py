@@ -87,4 +87,4 @@ def test_post_broken_ext(client):
 def test_extensions(client):
     req = client.get("/extensions")
     assert req.status_code == 200
-    assert req.json() == {"in": str(settings.CONVERT_TYPES), "out": str(settings.EXTENTIONS)}
+    assert req.json() == {"in": settings.CONVERT_TYPES, "out": settings.EXTENTIONS}

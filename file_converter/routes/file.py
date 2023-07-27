@@ -43,7 +43,7 @@ async def process(
     except ForbiddenExt:
         raise HTTPException(status_code=415, detail=f'Only {", ".join(str(settings.EXTENTIONS))} files are allowed.')
 
-    root_path = settings.ROOT_PATH.removesuffix('/')
+    root_path = str(settings.ROOT_PATH).removesuffix('/')
     return {
         "status": "Success",
         "file_url": f'{root_path}/{str(settings.STATIC_FOLDER)}/{result}',
