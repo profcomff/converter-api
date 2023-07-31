@@ -34,14 +34,14 @@ async def process(
     except UnsupportedToExt:
         raise HTTPException(
             status_code=415,
-            detail=f'Files are allowed to be converted only to {", ".join(str(settings.CONVERT_TYPES))}',
+            detail=f'Files are allowed to be converted only to {", ".join(settings.CONVERT_TYPES)}',
         )
 
     except ConvertError:
         raise HTTPException(status_code=400, detail='Posted file is corrupted')
 
     except ForbiddenExt:
-        raise HTTPException(status_code=415, detail=f'Only {", ".join(str(settings.EXTENTIONS))} files are allowed.')
+        raise HTTPException(status_code=415, detail=f'Only {", ".join(settings.EXTENTIONS)} files are allowed.')
 
     root_path = str(settings.ROOT_PATH).removesuffix('/')
     return {

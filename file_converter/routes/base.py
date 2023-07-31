@@ -40,7 +40,7 @@ class LimitUploadSize(BaseHTTPMiddleware):
             if 'content-length' not in request.headers:
                 return Response(status_code=status.HTTP_411_LENGTH_REQUIRED)
             content_length = int(request.headers['content-length'])
-            if content_length > int(self.max_upload_size):
+            if content_length > self.max_upload_size:
                 return Response(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE)
         return await call_next(request)
 
