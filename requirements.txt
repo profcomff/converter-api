@@ -1,5 +1,6 @@
 fastapi
-pydantic[dotenv]
+pydantic
+pydantic_settings
 uvicorn
 gunicorn
 aiofiles

@@ -2,7 +2,8 @@ import os
 from functools import lru_cache
 from typing import List
 
-from pydantic import BaseSettings, DirectoryPath
+from pydantic import ConfigDict, DirectoryPath
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -18,11 +19,7 @@ class Settings(BaseSettings):
     MAX_SIZE: int = 5000000  # Максимальный размер файла в байтах
     STATIC_FOLDER: DirectoryPath | None = "static"
 
-    class Config:
-        """Pydantic BaseSettings config"""
-
-        case_sensitive = True
-        env_file = ".env"
+    model_config = ConfigDict(case_sensitive=True, env_file=".env", extra="ignore")
 
 
 @lru_cache
