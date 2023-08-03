@@ -45,7 +45,7 @@ class LimitUploadSize(BaseHTTPMiddleware):
         return await call_next(request)
 
 
-app.add_middleware(LimitUploadSize, max_upload_size=str(settings.MAX_SIZE))
+app.add_middleware(LimitUploadSize, max_upload_size=settings.MAX_SIZE)
 
 
 @app.exception_handler(aiohttp.ClientConnectorError)

@@ -34,7 +34,7 @@ async def process(
     except UnsupportedToExt:
         raise HTTPException(
             status_code=415,
-            detail=f'Files are allowed to be converted only to {", ".join(str(settings.CONVERT_TYPES))}',
+            detail=f'Files are allowed to be converted only to {", ".join(settings.CONVERT_TYPES)}',
         )
 
     except ConvertError:
