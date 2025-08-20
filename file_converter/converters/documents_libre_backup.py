@@ -4,11 +4,9 @@ from typing import Awaitable, Callable
 
 from file_converter.converters.convertable import Convertable
 from file_converter.utils.libre import get_command
-from file_converter.utils.pandoc import get_pandoc_command
 
 
 class Doc(Convertable):
-    """Document converter - uses LibreOffice for .doc files (binary format)"""
     _com: Callable[[str, str], Awaitable[None]] = get_command()
 
     @classmethod
@@ -17,8 +15,7 @@ class Doc(Convertable):
 
 
 class Docx(Convertable):
-    """Document converter using Pandoc - supports .docx files"""
-    _com: Callable[[str, str], Awaitable[None]] = get_pandoc_command()
+    _com: Callable[[str, str], Awaitable[None]] = get_command()
 
     @classmethod
     async def convert(mcs, file_name: str, _new_filename: str):

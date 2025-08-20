@@ -14,8 +14,8 @@ class Settings(BaseSettings):
     CORS_ALLOW_METHODS: list[str] = ['*']
     CORS_ALLOW_HEADERS: list[str] = ['*']
     ROOT_PATH: str = '/' + os.getenv('APP_NAME', '')
-    EXTENTIONS: List[str] = ['pdf', 'docx', 'doc']
-    CONVERT_TYPES: List[str] = ['pdf']
+    EXTENTIONS: List[str] = ['pdf', 'docx', 'doc', 'odt', 'rtf']
+    CONVERT_TYPES: List[str] = ['pdf', 'html', 'docx', 'odt']
     MAX_SIZE: int = 5000000  # Максимальный размер файла в байтах
     STATIC_FOLDER: DirectoryPath | None = "static"
 
